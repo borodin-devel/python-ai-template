@@ -1,0 +1,73 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "uv: sync",
+      "type": "shell",
+      "command": "uv",
+      "args": ["sync", "--all-groups"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "pytest: coverage",
+      "type": "shell",
+      "command": "uv",
+      "args": ["run", "pytest"],
+      "dependsOn": "uv: sync",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ruff: format check",
+      "type": "shell",
+      "command": "uv",
+      "args": ["run", "ruff", "format", "--check", "src", "tests", "examples"],
+      "dependsOn": "uv: sync",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "ruff: lint",
+      "type": "shell",
+      "command": "uv",
+      "args": ["run", "ruff", "check", "src", "tests", "examples"],
+      "dependsOn": "uv: sync",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "pip-audit: local",
+      "type": "shell",
+      "command": "uv",
+      "args": ["run", "pip-audit", "--cache-dir", ".cache/pip-audit", "--local"],
+      "dependsOn": "uv: sync",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "scripts: check",
+      "type": "shell",
+      "command": ".agents/scripts/check.sh",
+      "dependsOn": "uv: sync",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "scripts: format",
+      "type": "shell",
+      "command": ".agents/scripts/format.sh",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "scripts: clean",
+      "type": "shell",
+      "command": ".agents/scripts/clean.sh",
+      "problemMatcher": []
+    }
+  ]
+}

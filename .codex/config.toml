@@ -1,0 +1,37 @@
+[mcp_servers.serena]
+command = "serena"
+args = ["start-mcp-server", "--context", "codex", "--project-from-cwd"]
+cwd = "."
+
+[mcp_servers.cocoindex]
+command = "cocoindex-code"
+args = ["serve"]
+cwd = "."
+
+[mcp_servers.cocoindex.env]
+COCOINDEX_CODE_DIR = ".cocoindex_code"
+
+[[hooks.SessionStart]]
+matcher = "startup|resume|clear|compact"
+
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = "SERENA_HOME=.serena serena-hooks activate --client codex"
+timeout = 10
+statusMessage = "Loading Serena project reminder"
+
+[[hooks.PreToolUse]]
+matcher = "*"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "SERENA_HOME=.serena serena-hooks remind --client codex"
+timeout = 10
+statusMessage = "Checking Serena symbolic-tool guidance"
+
+[[hooks.Stop]]
+
+[[hooks.Stop.hooks]]
+type = "command"
+command = "SERENA_HOME=.serena serena-hooks cleanup --client codex"
+timeout = 10
